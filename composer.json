@@ -1,0 +1,30 @@
+{
+    "name": "tomk79/microtime-recorder",
+    "description": "処理中の microtime を記録してボトルネックを探す デバッグライブラリです。",
+    "keywords": ["debug"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomoya Koyanagi",
+            "email": "tomk79@gmail.com"
+        }
+    ],
+    "scripts":{
+        "test": [
+            "php ./vendor/phpunit/phpunit/phpunit"
+        ]
+    } ,
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.1.0"
+    },
+    "autoload": {
+        "files": [
+            "php/microtime-recorder.php"
+        ]
+    }
+}
