@@ -66,7 +66,7 @@ $ php ./vendor/phpunit/phpunit/phpunit
 
 ## 更新履歴 - Change Log
 
-### tomk79/microtime-recorder v0.1.0 (リリース日未定)
+### tomk79/microtime-recorder v0.1.0 (2019年1月20日)
 
 - Initial release.
 
