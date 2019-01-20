@@ -7,12 +7,13 @@
 $ TBD
 ```
 
+
 ## 使い方 - Usage
 
 TBD
 
 
-## Test
+## テスト - Test
 
 ```
 $ cd (project directory)
@@ -20,7 +21,7 @@ $ php ./vendor/phpunit/phpunit/phpunit
 ```
 
 
-## Change Log
+## 更新履歴 - Change Log
 
 ### tomk79/microtime-recorder v0.1.0 (リリース日未定)
 
