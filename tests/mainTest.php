@@ -23,7 +23,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$record = $mr->rec();
 		$this->assertTrue( is_array($record) );
 		$this->assertTrue( is_float($record['microtime']) );
-		$this->assertTrue( is_null($record['elapsed']) );
+		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_null($record['last']) );
 		sleep(1);
 		$record = $mr->rec();
@@ -53,7 +53,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$record = $mr->rec();
 		$this->assertTrue( is_array($record) );
 		$this->assertTrue( is_float($record['microtime']) );
-		$this->assertTrue( is_null($record['elapsed']) );
+		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_null($record['last']) );
 		sleep(1);
 		$record = $mr->rec();
@@ -71,6 +71,36 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * microtime recording as TSV test
+	 */
+	public function testRecordeMicrotimeAsTsv(){
+		@unlink(__DIR__.'/dist/record.tsv');
+		ob_start();
+		$mr = new tomk79\microtimeRecorder(__DIR__.'/dist/record.tsv');
+		$this->assertTrue( is_object($mr) );
+
+		sleep(1);
+		$record = $mr->rec();
+		$this->assertTrue( is_array($record) );
+		$this->assertTrue( is_float($record['microtime']) );
+		$this->assertTrue( is_float($record['elapsed']) );
+		$this->assertTrue( is_null($record['last']) );
+		sleep(1);
+		$record = $mr->rec();
+		$this->assertTrue( is_float($record['microtime']) );
+		$this->assertTrue( is_float($record['elapsed']) );
+		$this->assertTrue( is_array($record['last']) );
+		sleep(1);
+		$record = $mr->rec();
+		sleep(1);
+		$record = $mr->rec();
+
+		$this->assertTrue( is_file(__DIR__.'/dist/record.tsv') );
+		$stdout = ob_get_clean();
+		$this->assertTrue( !strlen($stdout) );
+	}
+
+	/**
 	 * microtime recording as STDOUT test
 	 */
 	public function testRecordeMicrotimeAsStdout(){
@@ -82,7 +112,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$record = $mr->rec();
 		$this->assertTrue( is_array($record) );
 		$this->assertTrue( is_float($record['microtime']) );
-		$this->assertTrue( is_null($record['elapsed']) );
+		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_null($record['last']) );
 		sleep(1);
 		$record = $mr->rec();

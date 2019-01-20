@@ -16,6 +16,7 @@ class clearTest extends PHPUnit_Framework_TestCase{
 	public function testClear(){
 		@unlink(__DIR__.'/dist/record.txt');
 		@unlink(__DIR__.'/dist/record.csv');
+		@unlink(__DIR__.'/dist/record.tsv');
 	}
 
 }
