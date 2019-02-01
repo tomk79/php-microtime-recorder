@@ -38,17 +38,17 @@ class microtimeRecorder{
 				$this->record_format = 'csv';
 				$rec = '';
 				$rec .= '"Process ID"'.",";
-				$rec .= '"elapsed"'."\r\n";
+				$rec .= '"elapsed"'.",";
 				$rec .= '"FILE"'.",";
-				$rec .= '"LINE"'.",";
+				$rec .= '"LINE"'."\r\n";
 				error_log($rec, 3, $this->path_record);
 			}elseif( preg_match( '/\.tsv$/s', $dist ) ){
 				$this->record_format = 'tsv';
 				$rec = '';
 				$rec .= 'Process ID'."\t";
-				$rec .= 'elapsed'."\r\n";
+				$rec .= 'elapsed'."\t";
 				$rec .= 'FILE'."\t";
-				$rec .= 'LINE'."\t";
+				$rec .= 'LINE'."\r\n";
 				error_log($rec, 3, $this->path_record);
 			}
 		}elseif( $dist === true ){
@@ -92,17 +92,17 @@ class microtimeRecorder{
 				// csv
 				$rec_csv = '';
 				$rec_csv .= '"'.getmypid().'"'.",";
-				$rec_csv .= '"'.$record['elapsed'].'"'."\r\n";
+				$rec_csv .= '"'.sprintf("%.7f", $record['elapsed']).'"'.",";
 				$rec_csv .= '"'.$record['file'].'"'.",";
-				$rec_csv .= '"'.$record['line'].'"'.",";
+				$rec_csv .= '"'.$record['line'].'"'."\r\n";
 				error_log($rec_csv, 3, $this->path_record);
 			}elseif( $this->record_format == 'tsv' ){
 				// tsv
 				$rec_txt = '';
 				$rec_txt .= getmypid()."\t";
-				$rec_txt .= $record['elapsed']."\r\n";
+				$rec_txt .= sprintf("%.7f", $record['elapsed'])."\t";
 				$rec_txt .= $record['file']."\t";
-				$rec_txt .= $record['line']."\t";
+				$rec_txt .= $record['line']."\r\n";
 				error_log($rec_txt, 3, $this->path_record);
 			}else{
 				// txt
@@ -111,7 +111,7 @@ class microtimeRecorder{
 				$rec_txt .= '---------'."\r\n";
 				$rec_txt .= '[Microtime Recorder]'."\r\n";
 				$rec_txt .= 'Process ID: '.getmypid()."\r\n";
-				$rec_txt .= $record['elapsed'].' sec elapsed from '.( is_array($this->last_record) ? 'last record' : 'starting process' ).'.'."\r\n";
+				$rec_txt .= sprintf("%.7f", $record['elapsed']).' sec elapsed from '.( is_array($this->last_record) ? 'last record' : 'starting process' ).'.'."\r\n";
 				$rec_txt .= 'in '.$record['file'].' Line: '.$record['line']."\r\n";
 				error_log($rec_txt, 3, $this->path_record);
 			}

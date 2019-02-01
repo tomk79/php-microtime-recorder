@@ -66,6 +66,11 @@ $ php ./vendor/phpunit/phpunit/phpunit
 
 ## 更新履歴 - Change Log
 
+### tomk79/microtime-recorder v0.1.1 (2019年2月1日)
+
+- CSV, TSV 形式の列がずれる不具合を修正。
+- 経過秒 が 指数表記 となることがあったが、見づらいので少数表示になるように修正。
+
 ### tomk79/microtime-recorder v0.1.0 (2019年1月20日)
 
 - Initial release.
