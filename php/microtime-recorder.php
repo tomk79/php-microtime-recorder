@@ -40,7 +40,8 @@ class microtimeRecorder{
 				$rec .= '"Process ID"'.",";
 				$rec .= '"elapsed"'.",";
 				$rec .= '"FILE"'.",";
-				$rec .= '"LINE"'."\r\n";
+				$rec .= '"LINE"'.",";
+				$rec .= '"values"'."\r\n";
 				error_log($rec, 3, $this->path_record);
 			}elseif( preg_match( '/\.tsv$/s', $dist ) ){
 				$this->record_format = 'tsv';
@@ -48,7 +49,8 @@ class microtimeRecorder{
 				$rec .= 'Process ID'."\t";
 				$rec .= 'elapsed'."\t";
 				$rec .= 'FILE'."\t";
-				$rec .= 'LINE'."\r\n";
+				$rec .= 'LINE'."\t";
+				$rec .= 'values'."\r\n";
 				error_log($rec, 3, $this->path_record);
 			}
 		}elseif( $dist === true ){
@@ -58,6 +60,8 @@ class microtimeRecorder{
 
     /**
      * microtime を記録する
+	 * @param mixed $val 確認したい値(複数指定可)
+	 * @return array 記録内容を含む連想配列
      */
     public function rec(){
 		$record = current( debug_backtrace() );
@@ -75,13 +79,26 @@ class microtimeRecorder{
 			$record['elapsed'] = $record['microtime'] - $_SERVER['REQUEST_TIME_FLOAT'];
 		}
 
+		$args = func_get_args();
+		$record['values'] = '';
+		foreach($args as $i=>$arg){
+			if(count($args) > 1){
+				$record['values'] .= '----- '.$i.' ----'."\r\n";
+			}
+			ob_start();
+			var_dump($arg);
+			$record['values'] .= ob_get_clean()."\r\n";
+		}
+		$record['values'] = trim($record['values']);
+
 		if( $this->flg_stdout ){
 			// 記録を標準出力する
 			$stdout = '';
 			$stdout .= '<div style="display: block; visibility: visible; border: 3px solid #000; background:#fff; color: #000; padding: 10px; font-size: 12px; line-height: 1.2;">'."\r\n";
 			$stdout .= '<strong>[Microtime Recorder]</strong><br />'."\r\n";
-			$stdout .= $record['elapsed'].' sec elapsed from '.( is_array($this->last_record) ? 'last record' : 'starting process' ).'.'."<br />\r\n";
-			$stdout .= 'in '.$record['file'].' Line: '.$record['line']."<br />\r\n";
+			$stdout .= htmlspecialchars($record['elapsed']).' sec elapsed from '.( is_array($this->last_record) ? 'last record' : 'starting process' ).'.'."<br />\r\n";
+			$stdout .= 'in '.htmlspecialchars($record['file']).' Line: '.htmlspecialchars($record['line'])."<br />\r\n";
+			$stdout .= '<pre>'.htmlspecialchars($record['values']).'</pre>'."\r\n";
 			$stdout .= '</div>'."\r\n";
 			echo($stdout);
 		}
@@ -93,17 +110,25 @@ class microtimeRecorder{
 				$rec_csv = '';
 				$rec_csv .= '"'.getmypid().'"'.",";
 				$rec_csv .= '"'.sprintf("%.7f", $record['elapsed']).'"'.",";
-				$rec_csv .= '"'.$record['file'].'"'.",";
-				$rec_csv .= '"'.$record['line'].'"'."\r\n";
+				$rec_csv .= '"'.$this->escape_csv_val($record['file']).'"'.",";
+				$rec_csv .= '"'.$this->escape_csv_val($record['line']).'"'.",";
+				if( strlen($record['values']) ){
+					$rec_csv .= '"'.$this->escape_csv_val($record['values']).'"';
+				}
+				$rec_csv .= "\r\n";
 				error_log($rec_csv, 3, $this->path_record);
 			}elseif( $this->record_format == 'tsv' ){
 				// tsv
-				$rec_txt = '';
-				$rec_txt .= getmypid()."\t";
-				$rec_txt .= sprintf("%.7f", $record['elapsed'])."\t";
-				$rec_txt .= $record['file']."\t";
-				$rec_txt .= $record['line']."\r\n";
-				error_log($rec_txt, 3, $this->path_record);
+				$rec_tsv = '';
+				$rec_tsv .= getmypid()."\t";
+				$rec_tsv .= sprintf("%.7f", $record['elapsed'])."\t";
+				$rec_tsv .= $record['file']."\t";
+				$rec_tsv .= $record['line']."\t";
+				if( strlen($record['values']) ){
+					$rec_tsv .= '"'.$this->escape_csv_val($record['values']).'"';
+				}
+				$rec_tsv .= "\r\n";
+				error_log($rec_tsv, 3, $this->path_record);
 			}else{
 				// txt
 				$rec_txt = '';
@@ -113,6 +138,9 @@ class microtimeRecorder{
 				$rec_txt .= 'Process ID: '.getmypid()."\r\n";
 				$rec_txt .= sprintf("%.7f", $record['elapsed']).' sec elapsed from '.( is_array($this->last_record) ? 'last record' : 'starting process' ).'.'."\r\n";
 				$rec_txt .= 'in '.$record['file'].' Line: '.$record['line']."\r\n";
+				if( strlen($record['values']) ){
+					$rec_txt .= $record['values']."\r\n";
+				}
 				error_log($rec_txt, 3, $this->path_record);
 			}
 		}
@@ -120,5 +148,13 @@ class microtimeRecorder{
 		$this->last_record = $record;
         return $record;
     }
+
+	/**
+	 * CSVの値をエスケープする
+	 */
+	private function escape_csv_val( $val ){
+		$val = preg_replace('/\"/s', '""', $val);
+		return $val;
+	}
 
 }

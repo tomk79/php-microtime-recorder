@@ -55,6 +55,11 @@ $mr->rec(); // Save 2nd record
 
 `$mr->rec()` が実行された行番号を格納します。
 
+### values
+
+`$mr->rec()` が受け取った値を `var_dump()` して取得した文字列を格納します。
+`$mr->rec()` の引数は複数指定することができます。
+
 
 ## テスト - Test
 
@@ -65,6 +70,10 @@ $ php ./vendor/phpunit/phpunit/phpunit
 
 
 ## 更新履歴 - Change Log
+
+### tomk79/microtime-recorder v0.1.2 (2019年2月3日)
+
+- `$mr->rec()` に引数を渡せるようになった。
 
 ### tomk79/microtime-recorder v0.1.1 (2019年2月1日)
 

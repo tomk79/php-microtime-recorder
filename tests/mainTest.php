@@ -31,9 +31,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_array($record['last']) );
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec('文字列');
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec(null, array(1,2,3), 'string', 123, 1.23, $mr);
 
 		$this->assertTrue( is_file(__DIR__.'/dist/record.txt') );
 		$stdout = ob_get_clean();
@@ -61,9 +61,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_array($record['last']) );
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec('文字列');
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec(null, array(1,2,3), 'string', 123, 1.23, $mr);
 
 		$this->assertTrue( is_file(__DIR__.'/dist/record.csv') );
 		$stdout = ob_get_clean();
@@ -91,9 +91,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_array($record['last']) );
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec('文字列');
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec(null, array(1,2,3), 'string', 123, 1.23, $mr);
 
 		$this->assertTrue( is_file(__DIR__.'/dist/record.tsv') );
 		$stdout = ob_get_clean();
@@ -120,9 +120,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_float($record['elapsed']) );
 		$this->assertTrue( is_array($record['last']) );
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec('文字列');
 		sleep(1);
-		$record = $mr->rec();
+		$record = $mr->rec(null, array(1,2,3), 'string', 123, 1.23, $mr);
 
 		$stdout = ob_get_clean();
 		// var_dump($stdout);
